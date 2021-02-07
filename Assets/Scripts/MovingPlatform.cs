@@ -10,7 +10,7 @@ public class MovingPlatform : MonoBehaviour
 
     private bool movingToB;
 
-    void Update()
+    void FixedUpdate()
     {
         if (transform.position == _targetA.position)
         {
@@ -35,5 +35,21 @@ public class MovingPlatform : MonoBehaviour
     private void MoveTo(Vector3 targetPosition)
     {
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, Time.deltaTime * _speed);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            other.transform.parent = transform;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            other.transform.parent = null;
+        }
     }
 }
