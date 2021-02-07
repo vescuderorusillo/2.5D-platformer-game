@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -22,13 +23,29 @@ public class Player : MonoBehaviour
 
     private UIManager _uiManager;
 
+    [SerializeField]
+    private int _lives = 3;
+
     private void Start()
     {
         _controller = GetComponent<CharacterController>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+
+        _uiManager.UpdateLivesDisplay(_lives);
     }
 
     private void Update()
+    {
+        CalculateMovement();
+    }
+
+    public void AddCoins()
+    {
+        _coins++;
+        _uiManager.UpdateCoinDisplay(_coins);
+    }
+
+    private void CalculateMovement()
     {
         var horizontalInput = Input.GetAxis("Horizontal");
         var direction = new Vector3(horizontalInput, 0, 0);
@@ -57,9 +74,14 @@ public class Player : MonoBehaviour
         _controller.Move(velocity * Time.deltaTime);
     }
 
-    public void AddCoins()
+    public void Damage()
     {
-        _coins++;
-        _uiManager.UpdateCoinDisplay(_coins);
+        _lives--;
+        _uiManager.UpdateLivesDisplay(_lives);
+
+        if (_lives < 1)
+        {
+            SceneManager.LoadScene(0);
+        }
     }
 }
