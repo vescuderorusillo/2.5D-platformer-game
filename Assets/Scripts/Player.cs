@@ -17,9 +17,15 @@ public class Player : MonoBehaviour
 
     private bool _canDoubleJump;
 
+    [SerializeField]
+    private int _coins;
+
+    private UIManager _uiManager;
+
     private void Start()
     {
         _controller = GetComponent<CharacterController>();
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
     }
 
     private void Update()
@@ -49,7 +55,11 @@ public class Player : MonoBehaviour
 
         velocity.y = _yVelocity;
         _controller.Move(velocity * Time.deltaTime);
+    }
 
-
+    public void AddCoins()
+    {
+        _coins++;
+        _uiManager.UpdateCoinDisplay(_coins);
     }
 }
